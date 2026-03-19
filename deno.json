@@ -1,9 +1,10 @@
 {
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.2/",
-    "lume/jsx-runtime": "https://deno.land/x/lume@v3.2.2/deps/ssx.ts",
+    "lume/jsx-runtime": "npm:react@18.3.1/jsx-dev-runtime",
     "react": "npm:react@^18.3.1",
     "react-dom": "npm:react-dom@^18.3.1",
+    "react-dom/client": "npm:react-dom@^18.3.1/client",
     "react/jsx-runtime": "npm:react@^18.3.1/jsx-runtime",
     "@types/react": "npm:@types/react@^18.3.0",
     "@std/assert": "jsr:@std/assert@^1.0.0",
