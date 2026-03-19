@@ -1,9 +1,15 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@anabranch/anabranch@0": "0.10.0",
     "jsr:@anabranch/anabranch@0.10": "0.10.0",
     "jsr:@anabranch/anabranch@0.10.0": "0.10.0",
+    "jsr:@anabranch/cache@~0.1.2": "0.1.2",
+    "jsr:@anabranch/storage-browser@~0.2.12": "0.2.12",
+    "jsr:@anabranch/storage@0": "0.2.6",
+    "jsr:@anabranch/storage@~0.2.6": "0.2.6",
     "jsr:@davidbonnet/astring@1.8.6": "1.8.6",
+    "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/cli@1.0.28": "1.0.28",
     "jsr:@std/cli@1.0.6": "1.0.6",
     "jsr:@std/cli@^1.0.28": "1.0.28",
@@ -69,8 +75,32 @@
     "@anabranch/anabranch@0.10.0": {
       "integrity": "1f9296731691a51eb8aae2be4442ce76009a6f0d072ce88ff9294f115172af6f"
     },
+    "@anabranch/cache@0.1.2": {
+      "integrity": "3ce8f4eb88b9c60a80a2e5c6ff75f368edbc12830d920a0fa6c7e8bd4f3767b2",
+      "dependencies": [
+        "jsr:@anabranch/anabranch@0"
+      ]
+    },
+    "@anabranch/storage@0.2.6": {
+      "integrity": "0e8d07a7c082784ca98412fd3d249eab3682ff4bb368018af7724f196af04ddf",
+      "dependencies": [
+        "jsr:@anabranch/anabranch@0"
+      ]
+    },
+    "@anabranch/storage-browser@0.2.12": {
+      "integrity": "a840da18234be12567bcf9de7cd549ae6d70cbed463e7f85d47e96cc32c8071f",
+      "dependencies": [
+        "jsr:@anabranch/storage@0"
+      ]
+    },
     "@davidbonnet/astring@1.8.6": {
       "integrity": "98b4914c8863cdf8c0ff83bb5c528caa67a8dca6020ad6234113499f00583e3a"
+    },
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
     },
     "@std/cli@1.0.6": {
       "integrity": "d22d8b38c66c666d7ad1f2a66c5b122da1704f985d3c47f01129f05abb6c5d3d"
@@ -713,6 +743,7 @@
       "jsr:@anabranch/storage-browser@~0.2.12",
       "jsr:@anabranch/storage@~0.2.6",
       "jsr:@anabranch/web-client@~0.3.5",
+      "jsr:@std/assert@1",
       "npm:@types/react@*",
       "npm:react@*"
     ]

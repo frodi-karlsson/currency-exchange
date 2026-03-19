@@ -2,6 +2,7 @@
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.2/",
     "lume/jsx-runtime": "https://deno.land/x/lume@v3.2.2/deps/ssx.ts",
+    "@std/assert": "jsr:@std/assert@^1.0.0",
     "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.10.0",
     "@anabranch/cache": "jsr:@anabranch/cache@^0.1.2",
     "@anabranch/storage": "jsr:@anabranch/storage@^0.2.6",
