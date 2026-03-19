@@ -1,6 +1,8 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@anabranch/anabranch@0.10": "0.10.0",
+    "jsr:@anabranch/anabranch@0.10.0": "0.10.0",
     "jsr:@davidbonnet/astring@1.8.6": "1.8.6",
     "jsr:@std/cli@1.0.28": "1.0.28",
     "jsr:@std/cli@1.0.6": "1.0.6",
@@ -64,6 +66,9 @@
     "npm:meriyah@6.0.3": "6.0.3"
   },
   "jsr": {
+    "@anabranch/anabranch@0.10.0": {
+      "integrity": "1f9296731691a51eb8aae2be4442ce76009a6f0d072ce88ff9294f115172af6f"
+    },
     "@davidbonnet/astring@1.8.6": {
       "integrity": "98b4914c8863cdf8c0ff83bb5c528caa67a8dca6020ad6234113499f00583e3a"
     },
@@ -703,7 +708,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@anabranch/anabranch@0.1",
+      "jsr:@anabranch/anabranch@0.10",
       "jsr:@anabranch/cache@0.1",
       "jsr:@anabranch/storage-browser@0.1",
       "jsr:@anabranch/storage@0.1",

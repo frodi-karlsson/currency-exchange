@@ -6,7 +6,7 @@
     "@anabranch/storage": "jsr:@anabranch/storage@^0.1.0",
     "@anabranch/storage-browser": "jsr:@anabranch/storage-browser@^0.1.0",
     "@anabranch/web-client": "jsr:@anabranch/web-client@^0.1.0",
-    "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.1.0"
+    "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.10.0"
   },
   "tasks": {
     "dev": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts --serve",
