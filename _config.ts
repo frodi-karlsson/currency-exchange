@@ -18,7 +18,7 @@ site.use(esbuild({
 
 site.use(lightningcss());
 
-site.copy("src/styles");
+site.copy("src/styles", "styles");
 
 site.add("js/main.tsx");
 
