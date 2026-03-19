@@ -6,6 +6,7 @@ import lightningcss from "https://deno.land/x/lume@v3.2.2/plugins/lightningcss.t
 const site = lume({
   src: "./",
   dest: "./_site",
+  location: new URL("https://frodi-karlsson.github.io/currency-exchange/"),
 });
 
 site.use(esbuild({
