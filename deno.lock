@@ -8,6 +8,7 @@
     "jsr:@anabranch/storage-browser@~0.2.12": "0.2.12",
     "jsr:@anabranch/storage@0": "0.2.6",
     "jsr:@anabranch/storage@~0.2.6": "0.2.6",
+    "jsr:@anabranch/web-client@~0.3.5": "0.3.5",
     "jsr:@davidbonnet/astring@1.8.6": "1.8.6",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/cli@1.0.28": "1.0.28",
@@ -69,7 +70,8 @@
     "npm:markdown-it-deflist@3.0.0": "3.0.0",
     "npm:markdown-it@14.1.0": "14.1.0",
     "npm:markdown-it@14.1.1": "14.1.1",
-    "npm:meriyah@6.0.3": "6.0.3"
+    "npm:meriyah@6.0.3": "6.0.3",
+    "npm:react@^18.3.1": "18.3.1"
   },
   "jsr": {
     "@anabranch/anabranch@0.10.0": {
@@ -91,6 +93,12 @@
       "integrity": "a840da18234be12567bcf9de7cd549ae6d70cbed463e7f85d47e96cc32c8071f",
       "dependencies": [
         "jsr:@anabranch/storage@0"
+      ]
+    },
+    "@anabranch/web-client@0.3.5": {
+      "integrity": "5c99485354e51c8e16f803f81c1b6fee40b22dcee3ba58e82831a8841856edfb",
+      "dependencies": [
+        "jsr:@anabranch/anabranch@0"
       ]
     },
     "@davidbonnet/astring@1.8.6": {
@@ -437,6 +445,9 @@
         "@types/estree"
       ]
     },
+    "js-tokens@4.0.0": {
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
+    },
     "jsbi@4.3.2": {
       "integrity": "sha512-9fqMSQbhJykSeii05nxKl4m6Eqn2P6rOlYiS+C5Dr/HPIU/7yZxu5qzbs40tgaFORiw2Amd0mirjxatXYMkIew=="
     },
@@ -448,6 +459,13 @@
       "dependencies": [
         "uc.micro"
       ]
+    },
+    "loose-envify@1.4.0": {
+      "integrity": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==",
+      "dependencies": [
+        "js-tokens"
+      ],
+      "bin": true
     },
     "markdown-it-attrs@4.2.0_markdown-it@14.1.1": {
       "integrity": "sha512-m7svtUBythvcGFFZAv9VjMEvs8UbHri2sojJ3juJumoOzv8sdkx9a7W3KxiHbXxAbvL3Xauak8TMwCnvigVPKw==",
@@ -496,6 +514,12 @@
     },
     "punycode.js@2.3.1": {
       "integrity": "sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA=="
+    },
+    "react@18.3.1": {
+      "integrity": "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==",
+      "dependencies": [
+        "loose-envify"
+      ]
     },
     "tslib@2.8.1": {
       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
@@ -744,8 +768,9 @@
       "jsr:@anabranch/storage@~0.2.6",
       "jsr:@anabranch/web-client@~0.3.5",
       "jsr:@std/assert@1",
-      "npm:@types/react@*",
-      "npm:react@*"
+      "npm:@types/react@^18.3.0",
+      "npm:react-dom@^18.3.1",
+      "npm:react@^18.3.1"
     ]
   }
 }

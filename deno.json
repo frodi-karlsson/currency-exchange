@@ -2,6 +2,10 @@
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.2/",
     "lume/jsx-runtime": "https://deno.land/x/lume@v3.2.2/deps/ssx.ts",
+    "react": "npm:react@^18.3.1",
+    "react-dom": "npm:react-dom@^18.3.1",
+    "react/jsx-runtime": "npm:react@^18.3.1/jsx-runtime",
+    "@types/react": "npm:@types/react@^18.3.0",
     "@std/assert": "jsr:@std/assert@^1.0.0",
     "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.10.0",
     "@anabranch/cache": "jsr:@anabranch/cache@^0.1.2",
@@ -15,7 +19,6 @@
   },
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "npm:react",
-    "jsxImportSourceTypes": "npm:@types/react"
+    "jsxImportSource": "react"
   }
 }

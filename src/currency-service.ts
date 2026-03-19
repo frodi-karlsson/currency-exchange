@@ -1,5 +1,6 @@
 import { Task } from "@anabranch/anabranch";
 import type { CacheAdapter } from "@anabranch/cache";
+import type { WebClient } from "@anabranch/web-client";
 import type { Rate, Currency, RateResponse, CachedRate } from "./types.ts";
 import { InvalidCurrencyError, NetworkError, NoDataError } from "./errors.ts";
 import { isValidCurrency } from "./currencies.ts";
@@ -7,7 +8,7 @@ import { isValidCurrency } from "./currencies.ts";
 export class CurrencyService {
   constructor(
     private cache: CacheAdapter,
-    private client: { get: (url: string) => { run: () => Promise<{ data: RateResponse }> } }
+    private client: WebClient
   ) {}
 
   static buildCacheKey(from: Currency, to: Currency, date?: string): string {
@@ -26,7 +27,7 @@ export class CurrencyService {
 
       const cacheKey = CurrencyService.buildCacheKey(from, to, date);
 
-      const cached = await this.cache.get<CachedRate>(cacheKey);
+      const cached = await this.cache.get(cacheKey) as CachedRate | null;
       if (cached !== null) {
         return cached.rate;
       }
@@ -36,7 +37,7 @@ export class CurrencyService {
 
       try {
         const response = await this.client.get(url).run();
-        const data: RateResponse = response.data;
+        const data = response.data as RateResponse;
         
         const rate = data.rates[to];
         if (rate === undefined) {
@@ -82,7 +83,8 @@ export class CurrencyService {
 
       try {
         const response = await this.client.get(url).run();
-        return response.data.rates;
+        const data = response.data as { rates: Record<string, Record<Currency, Rate>> };
+        return data.rates;
       } catch (err) {
         if (err instanceof InvalidCurrencyError) {
           throw err;
