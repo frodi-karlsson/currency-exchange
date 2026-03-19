@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix
 import lume from "https://deno.land/x/lume@v3.2.2/mod.ts";
 import esbuild from "https://deno.land/x/lume@v3.2.2/plugins/esbuild.ts";
 import lightningcss from "https://deno.land/x/lume@v3.2.2/plugins/lightningcss.ts";

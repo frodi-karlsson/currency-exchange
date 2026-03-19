@@ -1,6 +1,9 @@
 {
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.2/",
+    "lume": "https://deno.land/x/lume@v3.2.2/mod.ts",
+    "lume/esbuild": "https://deno.land/x/lume@v3.2.2/plugins/esbuild.ts",
+    "lume/lightningcss": "https://deno.land/x/lume@v3.2.2/plugins/lightningcss.ts",
     "lume/jsx-runtime": "npm:react@18.3.1/jsx-dev-runtime",
     "react": "npm:react@^18.3.1",
     "react-dom": "npm:react-dom@^18.3.1",
@@ -16,7 +19,8 @@
   },
   "tasks": {
     "dev": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts --serve",
-    "build": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts"
+    "build": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts",
+    "check": "deno fmt --check && deno lint && deno test --allow-net --allow-env && actionlint .github/workflows/*.yml && deno task build"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

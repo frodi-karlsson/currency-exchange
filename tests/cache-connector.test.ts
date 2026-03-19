@@ -7,25 +7,28 @@ import { assertEquals } from "@std/assert";
 class MockCache {
   private store = new Map<string, unknown>();
 
-  async get<T>(key: string): Promise<T | null> {
+  get<T>(key: string): Promise<T | null> {
     const value = this.store.get(key);
-    return value !== undefined ? (value as T) : null;
+    return Promise.resolve(value !== undefined ? (value as T) : null);
   }
 
-  async set(key: string, value: unknown): Promise<void> {
+  set(key: string, value: unknown): Promise<void> {
     this.store.set(key, value);
+    return Promise.resolve();
   }
 
-  async has(key: string): Promise<boolean> {
-    return this.store.has(key);
+  has(key: string): Promise<boolean> {
+    return Promise.resolve(this.store.has(key));
   }
 
-  async delete(key: string): Promise<void> {
+  delete(key: string): Promise<void> {
     this.store.delete(key);
+    return Promise.resolve();
   }
 
-  async clear(): Promise<void> {
+  clear(): Promise<void> {
     this.store.clear();
+    return Promise.resolve();
   }
 }
 

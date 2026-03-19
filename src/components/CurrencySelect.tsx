@@ -21,7 +21,7 @@ export function CurrencySelect(
       <div className="select-wrapper">
         <select
           id={id}
-          className="currency-select neon-border"
+          className="currency-select accent-border"
           value={value}
           onChange={(e) =>
             onChange((e.target as HTMLSelectElement).value as Currency)}
