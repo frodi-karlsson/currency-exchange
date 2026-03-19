@@ -2,11 +2,11 @@
   "imports": {
     "lume/": "https://deno.land/x/lume@v3.2.2/",
     "lume/jsx-runtime": "https://deno.land/x/lume@v3.2.2/deps/ssx.ts",
-    "@anabranch/cache": "jsr:@anabranch/cache@^0.1.0",
-    "@anabranch/storage": "jsr:@anabranch/storage@^0.1.0",
-    "@anabranch/storage-browser": "jsr:@anabranch/storage-browser@^0.1.0",
-    "@anabranch/web-client": "jsr:@anabranch/web-client@^0.1.0",
-    "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.10.0"
+    "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.10.0",
+    "@anabranch/cache": "jsr:@anabranch/cache@^0.1.2",
+    "@anabranch/storage": "jsr:@anabranch/storage@^0.2.6",
+    "@anabranch/storage-browser": "jsr:@anabranch/storage-browser@^0.2.12",
+    "@anabranch/web-client": "jsr:@anabranch/web-client@^0.3.5"
   },
   "tasks": {
     "dev": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts --serve",

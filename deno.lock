@@ -709,10 +709,10 @@
   "workspace": {
     "dependencies": [
       "jsr:@anabranch/anabranch@0.10",
-      "jsr:@anabranch/cache@0.1",
-      "jsr:@anabranch/storage-browser@0.1",
-      "jsr:@anabranch/storage@0.1",
-      "jsr:@anabranch/web-client@0.1",
+      "jsr:@anabranch/cache@~0.1.2",
+      "jsr:@anabranch/storage-browser@~0.2.12",
+      "jsr:@anabranch/storage@~0.2.6",
+      "jsr:@anabranch/web-client@~0.3.5",
       "npm:@types/react@*",
       "npm:react@*"
     ]
