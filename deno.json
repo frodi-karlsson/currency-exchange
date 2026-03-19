@@ -1,8 +1,19 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts --serve",
+    "build": "deno run -A https://deno.land/x/lume@v3.2.2/cli.ts"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "lume/": "https://deno.land/x/lume@v3.2.2/",
+    "@anabranch/cache": "jsr:@anabranch/cache@^0.1.0",
+    "@anabranch/storage": "jsr:@anabranch/storage@^0.1.0",
+    "@anabranch/storage-browser": "jsr:@anabranch/storage-browser@^0.1.0",
+    "@anabranch/web-client": "jsr:@anabranch/web-client@^0.1.0",
+    "@anabranch/anabranch": "jsr:@anabranch/anabranch@^0.1.0"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "npm:react",
+    "jsxImportSourceTypes": "npm:@types/react"
   }
 }
