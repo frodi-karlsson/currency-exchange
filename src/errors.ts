@@ -24,10 +24,10 @@ export class NoDataError extends Error {
   constructor(
     readonly from: string,
     readonly to: string,
-    readonly date?: string
+    readonly date?: string,
   ) {
     super(
-      `No rate data available for ${from} to ${to}${date ? ` on ${date}` : ""}`
+      `No rate data available for ${from} to ${to}${date ? ` on ${date}` : ""}`,
     );
     this.name = "NoDataError";
   }

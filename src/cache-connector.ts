@@ -15,7 +15,9 @@ export class CacheConnector implements CacheAdapter {
   }
 
   async connect(): Promise<void> {
-    this.storage = await Storage.connect(createIndexedDB({ prefix: this.prefix })).run();
+    this.storage = await Storage.connect(
+      createIndexedDB({ prefix: this.prefix }),
+    ).run();
   }
 
   async get<T>(key: string): Promise<T | null> {
@@ -30,7 +32,7 @@ export class CacheConnector implements CacheAdapter {
     }
   }
 
-  async set(key: string, value: unknown, options?: SetOptions): Promise<void> {
+  async set(key: string, value: unknown, _options?: SetOptions): Promise<void> {
     if (!this.storage) return;
     try {
       const json = JSON.stringify(value);

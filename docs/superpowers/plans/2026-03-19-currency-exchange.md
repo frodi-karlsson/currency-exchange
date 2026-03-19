@@ -1,12 +1,19 @@
 # Currency Exchange Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use
+> superpowers:subagent-driven-development (recommended) or
+> superpowers:executing-plans to implement this plan task-by-task. Steps use
+> checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a Lume-based static site with Islands architecture that displays currency exchange rates with a Neon Cyberpunk aesthetic.
+**Goal:** Build a Lume-based static site with Islands architecture that displays
+currency exchange rates with a Neon Cyberpunk aesthetic.
 
-**Architecture:** Browser-layer services (CacheConnector, CurrencyService) use anabranch packages for storage and HTTP. Islands components hydrate on client. Lume handles static generation and TypeScript compilation.
+**Architecture:** Browser-layer services (CacheConnector, CurrencyService) use
+anabranch packages for storage and HTTP. Islands components hydrate on client.
+Lume handles static generation and TypeScript compilation.
 
-**Tech Stack:** Deno, Lume (static site generator), TypeScript, anabranch/* packages (cache, storage-browser, web-client), Frankfurter API
+**Tech Stack:** Deno, Lume (static site generator), TypeScript, anabranch/*
+packages (cache, storage-browser, web-client), Frankfurter API
 
 ---
 
@@ -41,13 +48,14 @@ currency-exchange/
 ## Task 1: Project Setup
 
 **Files:**
+
 - Create: `deno.json`
 - Create: `_config.ts`
 
 - [ ] **Step 1: Initialize Lume project**
 
-Run: `deno run -A https://lume.land/init.ts`
-Expected: Lume initialization prompts, select defaults
+Run: `deno run -A https://lume.land/init.ts` Expected: Lume initialization
+prompts, select defaults
 
 - [ ] **Step 2: Configure Deno imports**
 
@@ -108,14 +116,14 @@ Run: `mkdir -p src/components src/styles tests _includes`
 
 - [ ] **Step 5: Verify Lume runs**
 
-Run: `deno task dev`
-Expected: Lume dev server starts on localhost:3000
+Run: `deno task dev` Expected: Lume dev server starts on localhost:3000
 
 ---
 
 ## Task 2: Core Types and Error Classes
 
 **Files:**
+
 - Create: `src/types.ts`
 - Create: `src/errors.ts`
 - Create: `src/currencies.ts`
@@ -178,10 +186,10 @@ export class NoDataError extends Error {
   constructor(
     readonly from: string,
     readonly to: string,
-    readonly date?: string
+    readonly date?: string,
   ) {
     super(
-      `No rate data available for ${from} to ${to}${date ? ` on ${date}` : ""}`
+      `No rate data available for ${from} to ${to}${date ? ` on ${date}` : ""}`,
     );
     this.name = "NoDataError";
   }
@@ -229,14 +237,15 @@ export function isValidCurrency(code: string): code is Currency {
 
 - [ ] **Step 4: Verify types compile**
 
-Run: `deno check src/types.ts src/errors.ts src/currencies.ts`
-Expected: No type errors
+Run: `deno check src/types.ts src/errors.ts src/currencies.ts` Expected: No type
+errors
 
 ---
 
 ## Task 3: Cache Connector
 
 **Files:**
+
 - Create: `src/cache-connector.ts`
 - Create: `tests/cache-connector.test.ts`
 
@@ -294,8 +303,8 @@ Deno.test("MockCache: set and get roundtrip", async () => {
 
 - [ ] **Step 2: Run tests to verify they pass**
 
-Run: `deno test tests/cache-connector.test.ts`
-Expected: PASS - MockCache tests run
+Run: `deno test tests/cache-connector.test.ts` Expected: PASS - MockCache tests
+run
 
 - [ ] **Step 3: Implement CacheConnector**
 
@@ -319,7 +328,9 @@ export class CacheConnector implements CacheAdapter {
   }
 
   async connect(): Promise<void> {
-    this.storage = await Storage.connect(createIndexedDB({ prefix: this.prefix })).run();
+    this.storage = await Storage.connect(
+      createIndexedDB({ prefix: this.prefix }),
+    ).run();
   }
 
   async get<T>(key: string): Promise<T | null> {
@@ -388,8 +399,7 @@ export class CacheConnector implements CacheAdapter {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `deno test tests/cache-connector.test.ts`
-Expected: All tests PASS
+Run: `deno test tests/cache-connector.test.ts` Expected: All tests PASS
 
 - [ ] **Step 5: Commit**
 
@@ -403,6 +413,7 @@ git commit -m "feat: add core types, errors, and cache connector"
 ## Task 4: Currency Service
 
 **Files:**
+
 - Create: `src/currency-service.ts`
 - Create: `tests/currency-service.test.ts`
 
@@ -438,8 +449,8 @@ Deno.test("currencies: isValidCurrency returns true for supported currencies", (
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `deno test tests/currency-service.test.ts`
-Expected: FAIL - CurrencyService not found
+Run: `deno test tests/currency-service.test.ts` Expected: FAIL - CurrencyService
+not found
 
 - [ ] **Step 3: Implement CurrencyService**
 
@@ -450,14 +461,14 @@ import type { Task } from "@anabranch/anabranch";
 import { Task } from "@anabranch/anabranch";
 import type { WebClient } from "@anabranch/web-client";
 import type { CacheConnector } from "./cache-connector.ts";
-import type { Rate, Currency, RateResponse, CachedRate } from "./types.ts";
+import type { CachedRate, Currency, Rate, RateResponse } from "./types.ts";
 import { InvalidCurrencyError, NetworkError, NoDataError } from "./errors.ts";
 import { isValidCurrency } from "./currencies.ts";
 
 export class CurrencyService {
   constructor(
     private cache: CacheConnector,
-    private client: WebClient
+    private client: WebClient,
   ) {}
 
   static buildCacheKey(from: Currency, to: Currency, date?: string): string {
@@ -465,7 +476,11 @@ export class CurrencyService {
     return `currency:${from}:${to}:${datePart}`;
   }
 
-  getRate(from: Currency, to: Currency, date?: string): Task<Rate, InvalidCurrencyError | NetworkError | NoDataError> {
+  getRate(
+    from: Currency,
+    to: Currency,
+    date?: string,
+  ): Task<Rate, InvalidCurrencyError | NetworkError | NoDataError> {
     return Task.of(async () => {
       // Validate currencies
       if (!isValidCurrency(from)) {
@@ -490,7 +505,7 @@ export class CurrencyService {
       try {
         const response = await this.client.get(url).run();
         const data: RateResponse = response.data;
-        
+
         const rate = data.rates[to];
         if (rate === undefined) {
           throw new NoDataError(from, to, date);
@@ -510,7 +525,7 @@ export class CurrencyService {
           throw err;
         }
         throw new NetworkError(
-          err instanceof Error ? err.message : "Network request failed"
+          err instanceof Error ? err.message : "Network request failed",
         );
       }
     });
@@ -520,8 +535,11 @@ export class CurrencyService {
     from: Currency,
     to: Currency[],
     startDate: string,
-    endDate: string
-  ): Task<Record<string, Record<Currency, Rate>>, NetworkError | InvalidCurrencyError | NoDataError> {
+    endDate: string,
+  ): Task<
+    Record<string, Record<Currency, Rate>>,
+    NetworkError | InvalidCurrencyError | NoDataError
+  > {
     return Task.of(async () => {
       if (!isValidCurrency(from)) {
         throw new InvalidCurrencyError(from);
@@ -542,7 +560,7 @@ export class CurrencyService {
           throw err;
         }
         throw new NetworkError(
-          err instanceof Error ? err.message : "Network request failed"
+          err instanceof Error ? err.message : "Network request failed",
         );
       }
     });
@@ -552,8 +570,7 @@ export class CurrencyService {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `deno test tests/currency-service.test.ts`
-Expected: All tests PASS
+Run: `deno test tests/currency-service.test.ts` Expected: All tests PASS
 
 - [ ] **Step 5: Commit**
 
@@ -567,6 +584,7 @@ git commit -m "feat: add currency service with caching"
 ## Task 5: Design System CSS
 
 **Files:**
+
 - Create: `src/styles/design-system.css`
 
 - [ ] **Step 1: Create design system styles**
@@ -633,7 +651,7 @@ body {
   bottom: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: 
+  background-image:
     linear-gradient(var(--color-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -642,8 +660,12 @@ body {
 }
 
 @keyframes grid-scroll {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 50px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
 }
 
 /* Scanlines Overlay */
@@ -667,7 +689,7 @@ body {
 /* Neon Text */
 .neon-text {
   color: var(--color-neon-cyan);
-  text-shadow: 
+  text-shadow:
     0 0 5px var(--color-neon-cyan),
     0 0 10px var(--color-neon-cyan),
     0 0 20px var(--color-neon-cyan);
@@ -675,7 +697,7 @@ body {
 
 .neon-text-pink {
   color: var(--color-neon-pink);
-  text-shadow: 
+  text-shadow:
     0 0 5px var(--color-neon-pink),
     0 0 10px var(--color-neon-pink),
     0 0 20px var(--color-neon-pink);
@@ -684,14 +706,14 @@ body {
 /* Neon Border */
 .neon-border {
   border: 1px solid var(--color-neon-cyan);
-  box-shadow: 
+  box-shadow:
     0 0 5px var(--color-neon-cyan),
     inset 0 0 5px rgba(0, 255, 249, 0.1);
 }
 
 .neon-border-pink {
   border: 1px solid var(--color-neon-pink);
-  box-shadow: 
+  box-shadow:
     0 0 5px var(--color-neon-pink),
     inset 0 0 5px rgba(255, 0, 255, 0.1);
 }
@@ -709,16 +731,24 @@ body {
 }
 
 @keyframes neon-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { 
-    box-shadow: 0 0 5px var(--color-neon-cyan), inset 0 0 5px rgba(0, 255, 249, 0.1);
+  0%, 100% {
+    box-shadow:
+      0 0 5px var(--color-neon-cyan),
+      inset 0 0 5px rgba(0, 255, 249, 0.1);
   }
-  50% { 
-    box-shadow: 0 0 15px var(--color-neon-cyan), inset 0 0 10px rgba(0, 255, 249, 0.2);
+  50% {
+    box-shadow:
+      0 0 15px var(--color-neon-cyan),
+      inset 0 0 10px rgba(0, 255, 249, 0.2);
   }
 }
 
@@ -785,7 +815,9 @@ h1, h2, h3 {
   border: 1px solid var(--color-border);
   cursor: pointer;
   appearance: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .currency-select:focus {
@@ -851,7 +883,8 @@ h1, h2, h3 {
 
 - [ ] **Step 2: Verify CSS syntax**
 
-Run: `deno run --allow-read --allow-write npm:lightningcss --minify src/styles/design-system.css`
+Run:
+`deno run --allow-read --allow-write npm:lightningcss --minify src/styles/design-system.css`
 Expected: No syntax errors
 
 - [ ] **Step 3: Commit**
@@ -866,6 +899,7 @@ git commit -m "feat: add Neon Cyberpunk design system"
 ## Task 6: UI Components (Islands)
 
 **Files:**
+
 - Create: `src/components/CurrencySelect.tsx`
 - Create: `src/components/RateDisplay.tsx`
 - Create: `src/components/CurrencyConverter.tsx`
@@ -876,7 +910,11 @@ Create `src/components/CurrencySelect.tsx`:
 
 ```tsx
 import type { Currency } from "../types.ts";
-import { SUPPORTED_CURRENCIES, CURRENCY_NAMES, CURRENCY_SYMBOLS } from "../currencies.ts";
+import {
+  CURRENCY_NAMES,
+  CURRENCY_SYMBOLS,
+  SUPPORTED_CURRENCIES,
+} from "../currencies.ts";
 
 interface CurrencySelectProps {
   value: Currency;
@@ -885,7 +923,9 @@ interface CurrencySelectProps {
   id?: string;
 }
 
-export function CurrencySelect({ value, onChange, label, id }: CurrencySelectProps) {
+export function CurrencySelect(
+  { value, onChange, label, id }: CurrencySelectProps,
+) {
   return (
     <div className="input-group">
       {label && <label htmlFor={id} className="input-label">{label}</label>}
@@ -898,7 +938,8 @@ export function CurrencySelect({ value, onChange, label, id }: CurrencySelectPro
         >
           {SUPPORTED_CURRENCIES.map((currency) => (
             <option key={currency} value={currency}>
-              {CURRENCY_SYMBOLS[currency]} {currency} - {CURRENCY_NAMES[currency]}
+              {CURRENCY_SYMBOLS[currency]} {currency} -{" "}
+              {CURRENCY_NAMES[currency]}
             </option>
           ))}
         </select>
@@ -924,7 +965,9 @@ interface RateDisplayProps {
   cached?: boolean;
 }
 
-export function RateDisplay({ rate, fromCurrency, toCurrency, loading, cached }: RateDisplayProps) {
+export function RateDisplay(
+  { rate, fromCurrency, toCurrency, loading, cached }: RateDisplayProps,
+) {
   if (loading) {
     return (
       <div className="rate-container loading">
@@ -936,7 +979,10 @@ export function RateDisplay({ rate, fromCurrency, toCurrency, loading, cached }:
   if (rate === null) {
     return (
       <div className="rate-container">
-        <div className="rate-value" style={{ color: "var(--color-text-secondary)" }}>
+        <div
+          className="rate-value"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
           Select currencies to see rate
         </div>
       </div>
@@ -948,9 +994,14 @@ export function RateDisplay({ rate, fromCurrency, toCurrency, loading, cached }:
       <div className="rate-value neon-text animate-neon-pulse">
         {rate.toFixed(4)}
       </div>
-      <div className="rate-label neon-text-pink" style={{ fontSize: "0.875rem", marginTop: "0.5rem" }}>
-        {CURRENCY_SYMBOLS[fromCurrency as keyof typeof CURRENCY_SYMBOLS]} 1 {fromCurrency} = {" "}
-        {CURRENCY_SYMBOLS[toCurrency as keyof typeof CURRENCY_SYMBOLS]} {rate.toFixed(4)} {toCurrency}
+      <div
+        className="rate-label neon-text-pink"
+        style={{ fontSize: "0.875rem", marginTop: "0.5rem" }}
+      >
+        {CURRENCY_SYMBOLS[fromCurrency as keyof typeof CURRENCY_SYMBOLS]} 1{" "}
+        {fromCurrency} ={"  "}
+        {CURRENCY_SYMBOLS[toCurrency as keyof typeof CURRENCY_SYMBOLS]}{" "}
+        {rate.toFixed(4)} {toCurrency}
       </div>
     </div>
   );
@@ -962,7 +1013,7 @@ export function RateDisplay({ rate, fromCurrency, toCurrency, loading, cached }:
 Create `src/components/CurrencyConverter.tsx`:
 
 ```tsx
-import { useState, useEffect } from "npm:react";
+import { useEffect, useState } from "npm:react";
 import type { Currency, Rate } from "../types.ts";
 import { CurrencyService } from "../currency-service.ts";
 import { CacheConnector } from "../cache-connector.ts";
@@ -980,9 +1031,11 @@ export function CurrencyConverter() {
 
   useEffect(() => {
     const cache = new CacheConnector();
-    const client = WebClient.create().withBaseUrl("https://api.frankfurter.app");
+    const client = WebClient.create().withBaseUrl(
+      "https://api.frankfurter.app",
+    );
     setService(new CurrencyService(cache, client));
-    
+
     return () => {
       cache.close();
     };
@@ -994,16 +1047,16 @@ export function CurrencyConverter() {
     const fetchRate = async () => {
       setLoading(true);
       setCached(false);
-      
+
       const result = await service.getRate(fromCurrency, toCurrency).result();
-      
+
       if (result.ok) {
         setRate(result.value);
       } else {
         console.error("Failed to fetch rate:", result.error);
         setRate(null);
       }
-      
+
       setLoading(false);
     };
 
@@ -1017,7 +1070,8 @@ export function CurrencyConverter() {
 
   return (
     <div className="converter">
-      <style>{`
+      <style>
+        {`
         .converter {
           display: flex;
           flex-direction: column;
@@ -1059,8 +1113,9 @@ export function CurrencyConverter() {
         .rate-label {
           animation: neon-pulse 2s ease-in-out infinite;
         }
-      `}</style>
-      
+      `}
+      </style>
+
       <div className="currency-row">
         <CurrencySelect
           id="from-currency"
@@ -1078,7 +1133,7 @@ export function CurrencyConverter() {
           onChange={setToCurrency}
         />
       </div>
-      
+
       <RateDisplay
         rate={rate}
         fromCurrency={fromCurrency}
@@ -1093,8 +1148,7 @@ export function CurrencyConverter() {
 
 - [ ] **Step 4: Verify components compile**
 
-Run: `deno check src/components/*.tsx`
-Expected: No type errors
+Run: `deno check src/components/*.tsx` Expected: No type errors
 
 - [ ] **Step 5: Commit**
 
@@ -1108,6 +1162,7 @@ git commit -m "feat: add Island components for currency converter"
 ## Task 7: Layout and Main Page
 
 **Files:**
+
 - Create: `_includes/layout.tsx`
 - Modify: `index.tsx`
 
@@ -1131,8 +1186,15 @@ export default function Layout({ title, children }: LayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         <link rel="stylesheet" href="/styles/design-system.css" />
       </head>
       <body className="scanlines">
@@ -1160,14 +1222,25 @@ export default function IndexPage() {
   return (
     <Layout title="Currency Exchange">
       <header style={{ marginBottom: "var(--spacing-lg)" }}>
-        <h1 className="neon-text" style={{ fontSize: "2.5rem", textAlign: "center" }}>
+        <h1
+          className="neon-text"
+          style={{ fontSize: "2.5rem", textAlign: "center" }}
+        >
           CURRENCY EXCHANGE
         </h1>
-        <p className="neon-text-pink" style={{ textAlign: "center", marginTop: "var(--spacing-sm)", fontFamily: "var(--font-mono)", fontSize: "0.875rem" }}>
+        <p
+          className="neon-text-pink"
+          style={{
+            textAlign: "center",
+            marginTop: "var(--spacing-sm)",
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.875rem",
+          }}
+        >
           Real-time rates powered by Frankfurter API
         </p>
       </header>
-      
+
       <CurrencyConverter />
     </Layout>
   );
@@ -1211,13 +1284,11 @@ export default site;
 
 - [ ] **Step 4: Build and test**
 
-Run: `deno task build`
-Expected: Site builds to `_site/`
+Run: `deno task build` Expected: Site builds to `_site/`
 
 - [ ] **Step 5: Test dev server**
 
-Run: `deno task dev`
-Expected: Dev server starts, page loads at localhost:3000
+Run: `deno task dev` Expected: Dev server starts, page loads at localhost:3000
 
 - [ ] **Step 6: Commit**
 
@@ -1231,12 +1302,12 @@ git commit -m "feat: add layout and main page"
 ## Task 8: Final Testing and Polish
 
 **Files:**
+
 - Modify: All files as needed
 
 - [ ] **Step 1: Run all tests**
 
-Run: `deno test`
-Expected: All tests PASS
+Run: `deno test` Expected: All tests PASS
 
 - [ ] **Step 2: Test in browser manually**
 
@@ -1256,8 +1327,7 @@ Expected: All tests PASS
 
 - [ ] **Step 4: Lint and format**
 
-Run: `deno fmt` && `deno lint`
-Expected: No errors
+Run: `deno fmt` && `deno lint` Expected: No errors
 
 - [ ] **Step 5: Final commit**
 
@@ -1271,10 +1341,13 @@ git commit -m "chore: final polish and testing"
 ## Summary
 
 This plan creates a Lume-based static site with:
-- Browser-layer services using anabranch packages for caching (IndexedDB) and HTTP
+
+- Browser-layer services using anabranch packages for caching (IndexedDB) and
+  HTTP
 - Islands architecture for interactive components
 - Neon Cyberpunk design system
 - Currency conversion between USD, EUR, GBP, JPY, CHF, SEK
 - Full TDD coverage for core services
 
-Each task produces working, testable software. Follow TDD: write failing tests first, then implement.
+Each task produces working, testable software. Follow TDD: write failing tests
+first, then implement.

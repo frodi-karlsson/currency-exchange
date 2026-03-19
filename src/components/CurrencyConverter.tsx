@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Currency, Rate } from "../types.ts";
 import { CurrencyService } from "../currency-service.ts";
 import { CacheConnector } from "../cache-connector.ts";
@@ -16,9 +16,11 @@ export function CurrencyConverter() {
 
   useEffect(() => {
     const cache = new CacheConnector();
-    const client = WebClient.create().withBaseUrl("https://api.frankfurter.app");
+    const client = WebClient.create().withBaseUrl(
+      "https://api.frankfurter.app",
+    );
     setService(new CurrencyService(cache, client));
-    
+
     return () => {
       cache.close();
     };
@@ -30,16 +32,16 @@ export function CurrencyConverter() {
     const fetchRate = async () => {
       setLoading(true);
       setCached(false);
-      
+
       const result = await service.getRate(fromCurrency, toCurrency).result();
-      
+
       if (result.type === "success") {
         setRate(result.value);
       } else {
         console.error("Failed to fetch rate:", result.error);
         setRate(null);
       }
-      
+
       setLoading(false);
     };
 
@@ -53,7 +55,8 @@ export function CurrencyConverter() {
 
   return (
     <div className="converter">
-      <style>{`
+      <style>
+        {`
         .converter {
           display: flex;
           flex-direction: column;
@@ -95,8 +98,9 @@ export function CurrencyConverter() {
         .rate-label {
           animation: neon-pulse 2s ease-in-out infinite;
         }
-      `}</style>
-      
+      `}
+      </style>
+
       <div className="currency-row">
         <CurrencySelect
           id="from-currency"
@@ -104,7 +108,7 @@ export function CurrencyConverter() {
           value={fromCurrency}
           onChange={setFromCurrency}
         />
-        <button className="swap-btn neon-border-pink" onClick={handleSwap}>
+        <button type="button" className="swap-btn neon-border-pink" onClick={handleSwap}>
           ⇄
         </button>
         <CurrencySelect
@@ -114,7 +118,7 @@ export function CurrencyConverter() {
           onChange={setToCurrency}
         />
       </div>
-      
+
       <RateDisplay
         rate={rate}
         fromCurrency={fromCurrency}

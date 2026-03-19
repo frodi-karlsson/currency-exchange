@@ -4,7 +4,9 @@ Date: 2026-03-19
 
 ## Overview
 
-A Lume-based static site with Islands architecture that displays currency exchange rates. Features a Neon Cyberpunk aesthetic with brutalist design elements, neon accents, animated grids, and high contrast.
+A Lume-based static site with Islands architecture that displays currency
+exchange rates. Features a Neon Cyberpunk aesthetic with brutalist design
+elements, neon accents, animated grids, and high contrast.
 
 ## Supported Currencies
 
@@ -15,11 +17,15 @@ USD, EUR, GBP, JPY, CHF, SEK
 ### Core Layers
 
 **Browser Layer** - Runs in browser after initial page load:
-- `CacheConnector`: Implements `CacheAdapter` interface wrapping `storage-browser`'s IndexedDB connector
-- `CurrencyService`: Uses `WebClient` to fetch rates from Frankfurter API, caches via CacheConnector
+
+- `CacheConnector`: Implements `CacheAdapter` interface wrapping
+  `storage-browser`'s IndexedDB connector
+- `CurrencyService`: Uses `WebClient` to fetch rates from Frankfurter API,
+  caches via CacheConnector
 - **Islands**: Interactive components that hydrate on the client
 
 **Build Layer** - Runs during Lume build:
+
 - Lume configuration with plugins (lightningcss, esbuild)
 - TypeScript compilation to browser-ready JS
 - Static HTML generation
@@ -37,7 +43,9 @@ Page (static HTML)
 
 ### Dependencies
 
-All `@anabranch/*` packages are external dependencies from the anabranch library:
+All `@anabranch/*` packages are external dependencies from the anabranch
+library:
+
 - `@anabranch/cache` - Cache abstraction with Task semantics
 - `@anabranch/storage-browser` - IndexedDB adapter
 - `@anabranch/web-client` - HTTP client with retries/timeouts
@@ -49,6 +57,7 @@ All `@anabranch/*` packages are external dependencies from the anabranch library
 ### Types
 
 **Core Types:**
+
 ```typescript
 import { Task } from "@anabranch/anabranch";
 
@@ -68,16 +77,20 @@ interface RateResponse {
 
 ### Core Services
 
-**`src/cache-connector.ts`** - Implements `CacheAdapter` using `storage-browser`:
+**`src/cache-connector.ts`** - Implements `CacheAdapter` using
+`storage-browser`:
+
 - Methods: `get`, `set`, `delete`, `has`, `clear`
 - Key format: `currency:{from}:{to}:{date}`
 - Returns `T | null` on cache miss/failure (transparent degradation)
 
 **`src/currency-service.ts`** - Currency conversion logic:
+
 - `getRate(from: Currency, to: Currency, date?: Date): Task<Rate, NetworkError | InvalidCurrencyError>`
 - Uses WebClient internally with retries
 
 **`src/currencies.ts`** - Currency definitions:
+
 - `SUPPORTED_CURRENCIES`: USD, EUR, GBP, JPY, CHF, SEK
 - Currency type, display names, symbols
 
@@ -118,7 +131,8 @@ User selects currencies
 
 ### Cache Key Strategy
 
-- Date-specific rates: `currency:USD:SEK:2026-03-19` (TTL: 24h - historical rates don't change)
+- Date-specific rates: `currency:USD:SEK:2026-03-19` (TTL: 24h - historical
+  rates don't change)
 - Latest rates: `currency:USD:SEK:latest` (TTL: 1h - rates update frequently)
 
 ### API Response Handling
@@ -158,8 +172,10 @@ User selects currencies
 ### Visual Effects
 
 - **Glow Effects**: `text-shadow: 0 0 10px var(--color-neon-cyan);`
-- **Neon Borders**: Thin 1-2px borders with glow: `box-shadow: 0 0 5px var(--color-neon-pink), inset 0 0 5px var(--color-neon-pink);`
-- **Grid Background**: Animated diagonal grid lines with `background-image` pattern
+- **Neon Borders**: Thin 1-2px borders with glow:
+  `box-shadow: 0 0 5px var(--color-neon-pink), inset 0 0 5px var(--color-neon-pink);`
+- **Grid Background**: Animated diagonal grid lines with `background-image`
+  pattern
 - **Scanlines**: Subtle CRT-style scanlines via pseudo-element overlay
 
 ### Animations
@@ -167,20 +183,34 @@ User selects currencies
 ```css
 /* Rate update animation */
 @keyframes rate-update {
-  0% { opacity: 0; transform: translateY(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Neon pulse */
 @keyframes neon-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Grid scroll */
 @keyframes grid-scroll {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 50px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
 }
 ```
 
@@ -188,7 +218,8 @@ User selects currencies
 
 - **Inputs**: Dark background, neon border on focus, glowing placeholder text
 - **Dropdowns**: Custom styled with neon accents, dark dropdown menu
-- **Rate Display**: Large monospace numbers, cyan/green color, pulsing glow on update
+- **Rate Display**: Large monospace numbers, cyan/green color, pulsing glow on
+  update
 - **Buttons**: Neon border with hover glow effect, minimal background
 
 ### Layout
@@ -228,11 +259,13 @@ class InvalidCurrencyError extends Error {
 ### Layered Error Handling
 
 **1. CacheConnector** - Returns `T | null`:
+
 - Cache transparently degrades
 - Miss or failure returns null
 - Never throws
 
 **2. CurrencyService** - Propagates errors:
+
 ```typescript
 getRate(from: Currency, to: Currency): Task<Rate, NetworkError | InvalidCurrencyError> {
   return this.fetchRate(from, to)
@@ -248,6 +281,7 @@ getRate(from: Currency, to: Currency): Task<Rate, NetworkError | InvalidCurrency
 ```
 
 **3. Consumer** - Chooses handling:
+
 ```typescript
 // Throw on error:
 const rate = await currencyService.getRate("USD", "SEK").run();
@@ -270,11 +304,13 @@ else console.error(result.error);
 ### Unit Tests (Deno test runner)
 
 **CacheConnector Tests:**
+
 - `get` returns null on cache miss
 - `set` + `get` roundtrip works
 - Handles IndexedDB failures gracefully (returns null)
 
 **CurrencyService Tests:**
+
 - `getRate` returns cached value on HIT
 - `getRate` fetches from API on cache miss
 - `getRate` returns stale cache on NetworkError
@@ -282,6 +318,7 @@ else console.error(result.error);
 - WebClient retry behavior (mock API failures)
 
 **Cache Key Generation:**
+
 - Date-specific keys: `currency:USD:SEK:2026-03-19`
 - Latest keys: `currency:USD:SEK:latest`
 

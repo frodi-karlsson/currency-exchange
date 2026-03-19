@@ -1,14 +1,14 @@
 import { Task } from "@anabranch/anabranch";
 import type { CacheAdapter } from "@anabranch/cache";
 import type { WebClient } from "@anabranch/web-client";
-import type { Rate, Currency, RateResponse, CachedRate } from "./types.ts";
+import type { CachedRate, Currency, Rate, RateResponse } from "./types.ts";
 import { InvalidCurrencyError, NetworkError, NoDataError } from "./errors.ts";
 import { isValidCurrency } from "./currencies.ts";
 
 export class CurrencyService {
   constructor(
     private cache: CacheAdapter,
-    private client: WebClient
+    private client: WebClient,
   ) {}
 
   static buildCacheKey(from: Currency, to: Currency, date?: string): string {
@@ -16,7 +16,11 @@ export class CurrencyService {
     return `currency:${from}:${to}:${datePart}`;
   }
 
-  getRate(from: Currency, to: Currency, date?: string): Task<Rate, InvalidCurrencyError | NetworkError | NoDataError> {
+  getRate(
+    from: Currency,
+    to: Currency,
+    date?: string,
+  ): Task<Rate, InvalidCurrencyError | NetworkError | NoDataError> {
     return Task.of(async () => {
       if (!isValidCurrency(from)) {
         throw new InvalidCurrencyError(from);
@@ -38,7 +42,7 @@ export class CurrencyService {
       try {
         const response = await this.client.get(url).run();
         const data = response.data as RateResponse;
-        
+
         const rate = data.rates[to];
         if (rate === undefined) {
           throw new NoDataError(from, to, date);
@@ -57,7 +61,7 @@ export class CurrencyService {
           throw err;
         }
         throw new NetworkError(
-          err instanceof Error ? err.message : "Network request failed"
+          err instanceof Error ? err.message : "Network request failed",
         );
       }
     });
@@ -67,8 +71,11 @@ export class CurrencyService {
     from: Currency,
     to: Currency[],
     startDate: string,
-    endDate: string
-  ): Task<Record<string, Record<Currency, Rate>>, NetworkError | InvalidCurrencyError | NoDataError> {
+    endDate: string,
+  ): Task<
+    Record<string, Record<Currency, Rate>>,
+    NetworkError | InvalidCurrencyError | NoDataError
+  > {
     return Task.of(async () => {
       if (!isValidCurrency(from)) {
         throw new InvalidCurrencyError(from);
@@ -83,14 +90,16 @@ export class CurrencyService {
 
       try {
         const response = await this.client.get(url).run();
-        const data = response.data as { rates: Record<string, Record<Currency, Rate>> };
+        const data = response.data as {
+          rates: Record<string, Record<Currency, Rate>>;
+        };
         return data.rates;
       } catch (err) {
         if (err instanceof InvalidCurrencyError) {
           throw err;
         }
         throw new NetworkError(
-          err instanceof Error ? err.message : "Network request failed"
+          err instanceof Error ? err.message : "Network request failed",
         );
       }
     });
