@@ -25,6 +25,11 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Install actionlint
+        run: |
+          curl -sL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
       - name: Check
         run: deno task check
 
